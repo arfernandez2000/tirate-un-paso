@@ -5,16 +5,12 @@ import models.Particle;
 
 public class Analytical implements IntegrationScheme {
 
-    public double amplitude;
-    public double gamma;
-    public double k;
-    public double t;
+    public double amplitude = 1;
+    public double gamma = 100;
+    public double k = Math.pow(10, 4);
+    public double t = 0;
 
-    public Analytical(double amplitude, double gamma, double k) {
-        this.amplitude = amplitude;
-        this.gamma = gamma;
-        this.k = k;
-        this.t = 0;
+    public Analytical() {
     }
 
     @Override
@@ -32,7 +28,7 @@ public class Analytical implements IntegrationScheme {
     }
 
     @Override
-    public void netStep(double dT, Ball ball) {
+    public void nextStep(double dT, Ball ball) {
         //TODO Implement
     }
 }

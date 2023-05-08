@@ -7,7 +7,7 @@ public interface IntegrationScheme {
 
     void nextStep(double dT, Particle ball);
 
-    void netStep(double dT, Ball ball);
+    void nextStep(double dT, Ball ball);
 
     public interface Integrator {
     }

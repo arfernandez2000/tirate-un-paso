@@ -59,7 +59,7 @@ public class Verlet implements IntegrationScheme{
     }
 
     @Override
-    public void netStep(double dT, Ball ball) {
+    public void nextStep(double dT, Ball ball) {
 
     }
 

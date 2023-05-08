@@ -49,7 +49,7 @@ public class Beeman implements IntegrationScheme {
     }
 
     @Override
-    public void netStep(double dT, Ball ball) {
+    public void nextStep(double dT, Ball ball) {
         //TODO Implement
     }
 
