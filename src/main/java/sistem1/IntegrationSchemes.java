@@ -9,7 +9,36 @@ public class IntegrationSchemes {
     public static double k = 10000;
     public static double gamma = 100;
 
-    public List<ArrayList<Double>> verlet(Particle particle, double dT, PrintWriter writer){
+    public void analytical(Particle particle, double dT) {
+        double force = -k*particle.getX() - gamma*particle.getSpeedX();
+
+        double x;
+        double v;
+        double t = 0;
+        int amplitude = 1;
+
+        List<ArrayList<Double>> states = new ArrayList<>();
+
+        while(t <= 5) {
+
+            ArrayList<Double> state = new ArrayList<>();
+            state.add(t);
+            state.add(particle.getX());
+            state.add(particle.getSpeedX());
+            states.add(state);
+
+            force = -k*particle.getX() - gamma*particle.getSpeedX();
+
+            double T1 = Math.exp(-(gamma / (2 * particle.getMass())) * t);
+            double T3 = Math.pow((k / particle.getMass()) - ((Math.pow(gamma, 2) / (Math.pow(2 * particle.getMass(), 2)))), 0.5);
+            double T2 = Math.cos(T3 * t);
+
+            x = amplitude * T1 * T2;
+
+        }
+    }
+
+    public List<ArrayList<Double>> verlet(Particle particle, double dT){
 
         double force = -k*particle.getX() - gamma*particle.getSpeedX();
         //calculo el valor anterior con euler con -dT
@@ -21,8 +50,7 @@ public class IntegrationSchemes {
         List<ArrayList<Double>> states = new ArrayList<>();
 
         while(t <= 5){
-            // me guardo el estado
-            //t x vx
+
             ArrayList<Double> state = new ArrayList<>();
             state.add(t);
             state.add(particle.getX());
@@ -41,12 +69,11 @@ public class IntegrationSchemes {
             xBefore = particle.getX();
             particle.setX(x);
             t += dT;
-            print(particle, t, writer);
         }
         return states;
     }
 
-    public List<ArrayList<Double>> beeman(Particle particle, double dT, PrintWriter writer){
+    public List<ArrayList<Double>> beeman(Particle particle, double dT){
 
         double force = -k*particle.getX() - gamma*particle.getSpeedX();
         double xBefore = eulerX(particle.getX(), particle.getSpeedX(),-dT,force,particle.getMass());
@@ -86,14 +113,13 @@ public class IntegrationSchemes {
             particle.setX(x);
 
             t += dT;
-            print(particle, t, writer);
 
         }
         return states;
 
     }
 
-    public List<ArrayList<Double>> gear(Particle particle, double dT, PrintWriter writer){
+    public List<ArrayList<Double>> gear(Particle particle, double dT){
 
         List<ArrayList<Double>> states = new ArrayList<>();
         double t = 0;
@@ -130,7 +156,6 @@ public class IntegrationSchemes {
             particle.setSpeedX(derivatives.get(1));
 
             t += dT;
-            print(particle, t, writer);
         }
         return states;
     }
