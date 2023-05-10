@@ -12,21 +12,26 @@ public class Simulation {
         double dT = 0.00002;
         Particle particle = new Particle(1, 0, -(100.0 / (2 * 70)), 0, 70);
 
-        List<ArrayList<Double>> finalStates = new ArrayList<>();
-        IntegrationSchemes integrationSchemes = new IntegrationSchemes();
+        List<List<Double>> finalStates = new ArrayList<>();
 
-        if(args[0].equals("verlet"))
-            finalStates = integrationSchemes.verlet(particle, dT);
-        else if(args[0].equals("beeman"))
-            finalStates = integrationSchemes.beeman(particle, dT);
-        else if(args[0].equals("gpc5"))
-            finalStates = integrationSchemes.gear(particle, dT);
-        else
-            System.out.println("Invalid method");
+        switch (args[0]) {
+            case "verlet":
+                finalStates = Verlet.run(particle, dT);
+                break;
+            case "beeman":
+                finalStates = Beeman.run(particle, dT);
+                break;
+            case "gpc5":
+                finalStates = GPC5.run(particle, dT);
+                break;
+            default:
+                System.out.println("Invalid method");
+                break;
+        }
 
         try {
             FileWriter myWriter = new FileWriter("src/main/resources/" + args[0] + ".txt");
-            for (ArrayList<Double> frame : finalStates) {
+            for (List<Double> frame : finalStates) {
                 myWriter.write(frame.get(0) + "\t" + frame.get(1) + "\t" + frame.get(2) + "\n");
             }
             myWriter.close();
