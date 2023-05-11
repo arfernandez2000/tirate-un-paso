@@ -1,10 +1,12 @@
 package models;
 
 import utils.MathUtils;
+import utils.Tuple;
 
 public class Ball {
 
     private static int global_id = 0;
+
     private int id;
     private double x;
     private double y;
@@ -13,8 +15,6 @@ public class Ball {
     private double speedX;
     private double speedY;
     private boolean isHole;
-//
-//    private Set<Collision> collisions = new TreeSet<>();
 
     public Ball(double x, double y, double radius, double speedX, double speedY, int mass,  boolean isHole) {
         this.id = global_id++;
@@ -77,6 +77,13 @@ public class Ball {
         b.setSpeedX(b.getSpeedX() - jx);
         b.setSpeedY(b.getSpeedY() - jy);
         return true;
+    }
+
+    public Tuple force(Ball b) {
+        Tuple b1 = new Tuple(getX(), getY());
+        Tuple b2 = new Tuple(b.getX(), b.getY());
+        return b2.versor(b1).multiply(
+                100 * (b2.subtract(b1).norm() - 2 * getRadius()));
     }
 
     public double getX() {

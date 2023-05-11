@@ -1,4 +1,4 @@
-package sistem1;
+package models;
 
 public class Particle {
 

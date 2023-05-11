@@ -1,5 +1,7 @@
 package sistem1;
 
+import models.Particle;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,8 +33,8 @@ public class Simulation {
 
         try {
             FileWriter myWriter = new FileWriter("src/main/resources/" + args[0] + ".txt");
-            for (List<Double> frame : finalStates) {
-                myWriter.write(frame.get(0) + "\t" + frame.get(1) + "\t" + frame.get(2) + "\n");
+            for (List<Double> states : finalStates) {
+                myWriter.write(states.get(0) + "\t" + states.get(1) + "\t" + states.get(2) + "\n");
             }
             myWriter.close();
             System.out.println("Successfully wrote " + args[0] + ".txt.");

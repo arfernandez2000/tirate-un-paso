@@ -40,8 +40,20 @@ public class Tuple {
     public Tuple subtract(Tuple t){
         return new Tuple(a - t.getA(), b - t.getB());
     }
+    public Tuple subtract(double d){
+        return new Tuple(a - d, b - d);
+    }
 
     public Tuple divide(double d){
         return new Tuple(a / d, b / d);
     }
+
+    public double norm() {
+        return Math.sqrt(a * a + b * b);
+    }
+
+    public Tuple versor(Tuple t) {
+        return this.subtract(t).divide(this.subtract(t).norm());
+    }
+
 }
