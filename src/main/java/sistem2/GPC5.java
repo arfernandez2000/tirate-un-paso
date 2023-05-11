@@ -8,17 +8,18 @@ import java.util.List;
 
 public class GPC5 {
 
+    private static final double[] alpha = {3.0/16, 251.0/360, 1, 11.0/18, 1.0/6, 1.0/60};
     private static final ArrayList<Ball> balls = new ArrayList<>();
+    private static List<List<Tuple>> Rs = new ArrayList<>();
 
     public static List<ArrayList<Double>> gear(double dT, double tf){
 
         List<ArrayList<Double>> states = new ArrayList<>();
         double t = dT;
-        List<List<ArrayList<Double>>> currentRs = Rs;
+        List<List<Tuple>> currentRs = Rs;
 
         while(t <= tf) {
-//            System.out.println("t: " + t);
-            // me guardo el estado
+            // Me guardo el estado
             for (Ball ball : balls) {
                 ArrayList<Double> state = new ArrayList<>();
                 ArrayList<Double> position = currentRs.get(ball.getId()).get(0);
@@ -33,13 +34,13 @@ public class GPC5 {
                 states.add(state);
             }
 
-            //predicciones
-            List<List<ArrayList<Double>>> newDerivatives = gearPredictor(currentRs, dT);
+            // Predicciones
+            List<List<Tuple>> newDerivatives = gearPredictor(currentRs, dT);
 
-            //evaluar
-            List<ArrayList<Double>> deltasR2 = getR2(newDerivatives,dT);
+            // Evaluar
+            List<Tuple> deltasR2 = getR2(newDerivatives,dT);
 
-            //correccion
+            // Correccion
             currentRs = gearCorrector(newDerivatives, dT, deltasR2);
 
             t += dT;
@@ -55,76 +56,63 @@ public class GPC5 {
         for (Ball ball: balls) {
             List<Tuple> auxR = new ArrayList<>();
             //r0
-            r = new Tuple(ball.getX(), ball.getY());
-            auxR.add(r);
+            auxR.add(new Tuple(ball.getX(), ball.getY()));
             //r1
-            r = new Tuple(ball.getVx(), ball.getVy());
-            auxR.add(r);
+            auxR.add(new Tuple(ball.getVx(), ball.getVy()));
             //r2
             Tuple a = calculateA(ball,null);
-            r = new Tuple(a.getA(), a.getB());
-            auxR.add(r);
+            auxR.add(new Tuple(a.getA(), a.getB()));
             //r3
-            r = new Tuple(0.0, 0.0);
-            auxR.add(r);
+            auxR.add(new Tuple(0.0, 0.0));
             //r4
-            auxR.add(r);
+            auxR.add(new Tuple(0.0, 0.0));
             //r5
-            auxR.add(r);
+            auxR.add(new Tuple(0.0, 0.0));
 
             R.add(auxR);
         }
         return R;
     }
 
-    public static List<List<ArrayList<Double>>> gearPredictor(List<List<ArrayList<Double>>> der, double dT){
+    public static List<List<Tuple>> gearPredictor(List<List<Tuple>> der, double dT){
 //       [ Sol:[ [r0x r0y], [r1x r1y].. ] Tierra:[ [r0x r0y], [r1x r1y].. ] ]
-        List<List<ArrayList<Double>>> newDerivatives = new ArrayList<>();
+        List<List<Tuple>> newDerivatives = new ArrayList<>();
 
-        for(List<ArrayList<Double>> rs : der) {  // para cada pelota
-            List<ArrayList<Double>> auxNewDerivatives = new ArrayList<>();
+        for(List<Tuple> rs : der) {  // para cada pelota
+            List<Tuple> auxNewDerivatives = new ArrayList<>();
 
-            double r0x = rs.get(0).get(0) + rs.get(1).get(0) * dT + rs.get(2).get(0) * dT * dT / 2 + rs.get(3).get(0) * dT * dT * dT / 6 + rs.get(4).get(0) * dT * dT * dT * dT / 24 + rs.get(5).get(0) * dT * dT * dT * dT * dT / 120;
-            double r0y = rs.get(0).get(1) + rs.get(1).get(1) * dT + rs.get(2).get(1) * dT * dT / 2 + rs.get(3).get(1) * dT * dT * dT / 6 + rs.get(4).get(1) * dT * dT * dT * dT / 24 + rs.get(5).get(1) * dT * dT * dT * dT * dT / 120;
-            ArrayList<Double> r0 = new ArrayList<>();
-            r0.add(r0x);
-            r0.add(r0y);
+            // TODO Habria que refactorear todas las cuentas para que usen la tupla en vez del ArrayList de los doubles x,y
+
+            double r0x = rs.get(0).getA() + rs.get(1).getA() * dT + rs.get(2).getA() * dT * dT / 2 + rs.get(3).getA() * dT * dT * dT / 6 + rs.get(4).getA() * dT * dT * dT * dT / 24 + rs.get(5).getA() * dT * dT * dT * dT * dT / 120;
+            double r0y = rs.get(0).getB() + rs.get(1).getB() * dT + rs.get(2).getB() * dT * dT / 2 + rs.get(3).getB() * dT * dT * dT / 6 + rs.get(4).getB() * dT * dT * dT * dT / 24 + rs.get(5).getB() * dT * dT * dT * dT * dT / 120;
+            Tuple r0 = new Tuple(r0x, r0y);
             auxNewDerivatives.add(r0);
 
-            double r1x = rs.get(1).get(0) + rs.get(2).get(0) * dT + rs.get(3).get(0) * dT * dT / 2 + rs.get(4).get(0) * dT * dT * dT / 6 + rs.get(5).get(0) * dT * dT * dT * dT / 24;
-            double r1y = rs.get(1).get(1) + rs.get(2).get(1) * dT + rs.get(3).get(1) * dT * dT / 2 + rs.get(4).get(1) * dT * dT * dT / 6 + rs.get(5).get(1) * dT * dT * dT * dT / 24;
-            ArrayList<Double> r1 = new ArrayList<>();
-            r1.add(r1x);
-            r1.add(r1y);
+            double r1x = rs.get(1).getA() + rs.get(2).getA() * dT + rs.get(3).getA() * dT * dT / 2 + rs.get(4).getA() * dT * dT * dT / 6 + rs.get(5).getA() * dT * dT * dT * dT / 24;
+            double r1y = rs.get(1).getB() + rs.get(2).getB() * dT + rs.get(3).getB() * dT * dT / 2 + rs.get(4).getB() * dT * dT * dT / 6 + rs.get(5).getB() * dT * dT * dT * dT / 24;
+            Tuple r1 = new Tuple(r1x, r1y);
             auxNewDerivatives.add(r1);
 
-            double r2x = rs.get(2).get(0) + rs.get(3).get(0) * dT + rs.get(4).get(0) * dT * dT / 2 + rs.get(5).get(0) * dT * dT * dT / 6;
-            double r2y = rs.get(2).get(1) + rs.get(3).get(1) * dT + rs.get(4).get(1) * dT * dT / 2 + rs.get(5).get(1) * dT * dT * dT / 6;
-            ArrayList<Double> r2 = new ArrayList<>();
-            r2.add(r2x);
-            r2.add(r2y);
+            double r2x = rs.get(2).getA() + rs.get(3).getA() * dT + rs.get(4).getA() * dT * dT / 2 + rs.get(5).getA() * dT * dT * dT / 6;
+            double r2y = rs.get(2).getB() + rs.get(3).getB() * dT + rs.get(4).getB() * dT * dT / 2 + rs.get(5).getB() * dT * dT * dT / 6;
+            Tuple r2 = new Tuple(r2x, r2y);
             auxNewDerivatives.add(r2);
 
-            double r3x = rs.get(3).get(0) + rs.get(4).get(0) * dT + rs.get(5).get(0) * dT * dT / 2;
-            double r3y = rs.get(3).get(1) + rs.get(4).get(1) * dT + rs.get(5).get(1) * dT * dT / 2;
-            ArrayList<Double> r3 = new ArrayList<>();
-            r3.add(r3x);
-            r3.add(r3y);
+            double r3x = rs.get(3).getA() + rs.get(4).getA() * dT + rs.get(5).getA() * dT * dT / 2;
+            double r3y = rs.get(3).getB() + rs.get(4).getB() * dT + rs.get(5).getB() * dT * dT / 2;
+            Tuple r3 = new Tuple(r3x, r3y);
             auxNewDerivatives.add(r3);
 
-            double r4x = rs.get(4).get(0) + rs.get(5).get(0) * dT;
-            double r4y = rs.get(4).get(1) + rs.get(5).get(1) * dT;
-            ArrayList<Double> r4 = new ArrayList<>();
-            r4.add(r4x);
-            r4.add(r4y);
+            double r4x = rs.get(4).getA() + rs.get(5).getA() * dT;
+            double r4y = rs.get(4).getB() + rs.get(5).getB() * dT;
+            Tuple r4 = new Tuple(r4x, r4y);
             auxNewDerivatives.add(r4);
 
-            double r5x = rs.get(5).get(0);
-            double r5y = rs.get(5).get(1);
-            ArrayList<Double> r5 = new ArrayList<>();
-            r5.add(r5x);
-            r5.add(r5y);
+            double r5x = rs.get(5).getA();
+            double r5y = rs.get(5).getB();
+            Tuple r5 = new Tuple(r5x, r5y);
             auxNewDerivatives.add(r5);
+
             newDerivatives.add(auxNewDerivatives);
         }
         return newDerivatives;

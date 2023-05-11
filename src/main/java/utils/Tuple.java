@@ -9,7 +9,7 @@ public class Tuple {
         this.b = b;
     }
 
-    public Tuple(){
+    public Tuple() {
         this.a = 0.;
         this.b = 0.;
     }
