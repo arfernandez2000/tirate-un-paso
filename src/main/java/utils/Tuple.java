@@ -9,6 +9,11 @@ public class Tuple {
         this.b = b;
     }
 
+    public Tuple(){
+        this.a = 0.;
+        this.b = 0.;
+    }
+
     public double getA() {
         return a;
     }
