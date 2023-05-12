@@ -10,8 +10,8 @@ import java.util.List;
 public class Simulation {
 
     public static void main(String[] args) {
-
-        double dT = 0.00002;
+        int accuracy = 6;
+        double dT = Math.pow(10, -accuracy);
         Particle particle = new Particle(1, 0, -(100.0 / (2 * 70)), 0, 70);
 
         List<List<Double>> finalStates = new ArrayList<>();
@@ -32,12 +32,11 @@ public class Simulation {
         }
 
         try {
-            FileWriter myWriter = new FileWriter("src/main/resources/" + args[0] + ".txt");
+            FileWriter myWriter = new FileWriter("src/main/resources/" + args[0] + "_" + accuracy +".txt");
             for (List<Double> states : finalStates) {
                 myWriter.write(states.get(0) + "\t" + states.get(1) + "\t" + states.get(2) + "\n");
             }
             myWriter.close();
-            System.out.println("Successfully wrote " + args[0] + ".txt.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
