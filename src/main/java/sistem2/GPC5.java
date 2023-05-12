@@ -4,44 +4,50 @@ import models.Ball;
 import utils.Tuple;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GPC5 {
 
     private static final double[] alpha = { 3.0/16, 251.0/360, 1, 11.0/18, 1.0/6, 1.0/60 };
-    private static final List<Ball> balls = new ArrayList<>();
-    private static List<List<Tuple>> Rs;
+    private static List<Ball> balls;
+    private static List<List<Tuple>> Rs = new ArrayList<>();
     private static final double dT = 200;
 
     private static final double tf = 1000;
 
-    public static List<List<Double>> gear() {
+    public static List<List<List<Double>>> gear() {
 
-        List<List<Double>> states = new ArrayList<>();
+        List<List<List<Double>>> states = new ArrayList<>();
         double t = dT;
         List<List<Tuple>> currentRs = Rs;
 
         while (t <= tf) {
+            List<List<Double>> auxArray = new ArrayList<>();
+            auxArray.add(Arrays.asList(t, (double) balls.size()));
             for (Ball ball : balls) {
-                ArrayList<Double> state = new ArrayList<>();
+                auxArray = new ArrayList<>();
+                ArrayList<Double> ballInfo = new ArrayList<>();
                 Tuple position = currentRs.get(ball.getId()).get(0);
                 Tuple velocity = currentRs.get(ball.getId()).get(1);
 
-                state.add(t);
-                state.add((double) ball.getId());
-                state.add(position.getA());
-                state.add(position.getB());
-                state.add(velocity.getA());
-                state.add(velocity.getB());
+                ballInfo.add(t);
+                ballInfo.add((double) ball.getId());
+                ballInfo.add(position.getA());
+                ballInfo.add(position.getB());
+                ballInfo.add(velocity.getA());
+                ballInfo.add(velocity.getB());
 
-                states.add(state);
+                auxArray.add(ballInfo);
+
+                states.add(auxArray);
             }
 
             // Predicciones
             List<List<Tuple>> newDerivatives = gearPredictor(currentRs, dT);
 
             // Evaluar
-            List<Tuple> deltasR2 = getR2(newDerivatives,dT);
+            List<Tuple> deltasR2 = getR2(newDerivatives, dT);
 
             // Correccion
             currentRs = gearCorrector(newDerivatives, dT, deltasR2);
@@ -50,8 +56,9 @@ public class GPC5 {
         }
         return states;
     }
-    public static void initialRs(){
+    public static void initialRs(List<Ball> ballList){
 //      Lista de particulas -> cada una tiene una lista de Rs (que son tuplas)
+        balls = ballList;
         for (Ball ball: balls) {
             List<Tuple> auxR = new ArrayList<>();
 
@@ -76,7 +83,7 @@ public class GPC5 {
 //       [ Sol:[ [r0x r0y], [r1x r1y].. ] Tierra:[ [r0x r0y], [r1x r1y].. ] ]
         List<List<Tuple>> newDerivatives = new ArrayList<>();
 
-        for(List<Tuple> rs : der) {  // para cada pelota
+        for (List<Tuple> rs : der) {  // para cada pelota
             List<Tuple> auxNewDerivatives = new ArrayList<>();
 
             // TODO Habria que refactorear todas las cuentas para que usen la tupla en vez del ArrayList de los doubles x,y
@@ -120,7 +127,7 @@ public class GPC5 {
         // [ [ [r0x r0y] [r1x r1y] ] [ [r2x r2y] [r3x r3y] ] ]
         List<List<Tuple>> newDerivatives = new ArrayList<>();
         int count = 0;
-        for(List<Tuple> rs : der) { // por planeta
+        for (List<Tuple> rs : der) { // por planeta
 
             List<Tuple> auxNewDerivatives = new ArrayList<>();
 
