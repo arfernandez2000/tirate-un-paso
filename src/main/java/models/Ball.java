@@ -53,16 +53,18 @@ public class Ball {
     public Tuple forceVerticalWall(Wall wall) {
         double f = 0;
         int k = 100;
-        double xDiff = Math.abs(getX() - getRadius() - wall.getX());
+
         if(wall.isRightWall()) {
-            if(getX() + getRadius() >= wall.getX()) {
+            if(getX() + getRadius() <= wall.getX()) {
                 return new Tuple(0, 0);
             }
+            double xDiff = Math.abs(getX() + getRadius() - wall.getX());
             f = -k * Math.abs(xDiff);
         } else {
-            if(getX() - getRadius() <= wall.getX()) {
+            if(getX() - getRadius() >= wall.getX()) {
                 return new Tuple(0, 0);
             }
+            double xDiff = Math.abs(getX() - getRadius() - wall.getX());
             f = k * Math.abs(xDiff);
         }
 
@@ -73,17 +75,19 @@ public class Ball {
     public Tuple forceHorizontalWall(Wall wall) {
         double f = 0;
         int k = 100;
-        double yDiff = Math.abs(getY() - getRadius() - wall.getY());
+
 
         if(wall.isTopWall()) {
-            if(getY() + getRadius() >= wall.getY()) {
+            if(getY() + getRadius() <= wall.getY()) {
                 return new Tuple(0, 0);
             }
+            double yDiff = Math.abs(getY() + getRadius() - wall.getY());
             f = -k * Math.abs(yDiff);
         } else {
-            if(getY() + getRadius() >= wall.getY()) {
+            if(getY() - getRadius() >= wall.getY()) {
                 return new Tuple(0, 0);
             }
+            double yDiff = Math.abs(getY() - getRadius() - wall.getY());
             f = k * Math.abs(yDiff);
         }
 

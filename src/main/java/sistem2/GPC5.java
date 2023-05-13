@@ -14,7 +14,7 @@ public class GPC5 {
     private static final double[] alpha = { 3.0/16, 251.0/360, 1, 11.0/18, 1.0/6, 1.0/60 };
     private static List<Ball> balls;
     private static final List<List<Tuple>> Rs = new ArrayList<>();
-    private static final double dT = Math.pow(10, -2);
+    private static final double dT = Math.pow(10, -3);
 
     private static final double tf = 1000;
 
@@ -36,15 +36,15 @@ public class GPC5 {
                 }
 
                 printWriter.println(printBalls(balls, balls.size(), t, gen));
-                if(gen >= 54 && gen <= 57)
+                if(gen >=532 && gen <= 535)
                     System.out.println("debug");
-                // Predicciones
+                // Prediction
                 List<List<Tuple>> newDerivatives = gearPredictor(currentRs);
 
-                // Evaluar
+                // Evaluate
                 List<Tuple> deltasR2 = getR2(newDerivatives);
 
-                // Correccion
+                // Correction
                 currentRs = gearCorrector(newDerivatives, deltasR2);
 
                 t += dT;
@@ -198,6 +198,7 @@ public class GPC5 {
             Tuple r2 = newDerivatives.get(ball.getId()).get(2);
 
             double dR2X = (F.getA() / ball.getMass() - r2.getA()) * dT*dT / 2;
+
             double dR2Y = (F.getB() / ball.getMass() - r2.getB()) * dT*dT / 2;
 
             deltasR2.add(new Tuple(dR2X, dR2Y));
