@@ -10,24 +10,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GPC5 {
-
+    private static final int PRECISION = 5;
+    private static final double FINAL_TIME = 100;
     private static final double[] alpha = { 3.0/16, 251.0/360, 1, 11.0/18, 1.0/6, 1.0/60 };
     private static List<Ball> balls;
     private static final List<List<Tuple>> Rs = new ArrayList<>();
-    private static final double dT = Math.pow(10, -3);
-
-    private static final double tf = 1000;
+    private static final double dT = Math.pow(10, -PRECISION);
 
     public static void gear() {
 
         try {
-            FileWriter myWriter = new FileWriter("src/main/resources/states.txt");
+            FileWriter myWriter = new FileWriter("src/main/resources/states_" + PRECISION +".txt");
             PrintWriter printWriter = new PrintWriter(myWriter);
 
             double t = dT;
             List<List<Tuple>> currentRs = Rs;
             int gen = 0;
-            while (t <= tf) {
+            while (t <= FINAL_TIME) {
                 for (Ball ball : balls) {
                     ball.setX(currentRs.get(ball.getId()).get(0).getA());
                     ball.setY(currentRs.get(ball.getId()).get(0).getB());
@@ -217,9 +216,9 @@ public class GPC5 {
 
     static String printBalls(List<Ball> balls, int balls_left, double time, int gen) {
         StringBuilder sb = new StringBuilder();
-        sb.append(time).append("\n");
         sb.append(balls_left).append("\n");
-        sb.append(gen).append("\n");
+        sb.append(time).append("\n");
+//        sb.append(gen).append("\n");
         for (Ball ball : balls) {
             String sb_line = ball.getId() + "\t" +
                     ball.getX() + "\t" +
