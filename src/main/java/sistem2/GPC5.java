@@ -1,6 +1,7 @@
 package sistem2;
 
 import models.Ball;
+import models.Wall;
 import utils.Tuple;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class GPC5 {
             //r1
             auxR.add(new Tuple(ball.getSpeedX(), ball.getSpeedY()));
             //r2
-            auxR.add(calculateA(ball,null));
+            auxR.add(sumForces(ball));
             //r3
             auxR.add(new Tuple(0.0, 0.0));
             //r4
@@ -80,7 +81,6 @@ public class GPC5 {
     }
 
     public static List<List<Tuple>> gearPredictor(List<List<Tuple>> der, double dT){
-//       [ Sol:[ [r0x r0y], [r1x r1y].. ] Tierra:[ [r0x r0y], [r1x r1y].. ] ]
         List<List<Tuple>> newDerivatives = new ArrayList<>();
 
         for (List<Tuple> rs : der) {  // para cada pelota
@@ -171,18 +171,28 @@ public class GPC5 {
         return newDerivatives;
     }
 
-    private static Tuple calculateA(Ball ball, List<List<Tuple>> Rs) {
+    private static Tuple sumForces(Ball ball) {
+        Tuple A = new Tuple(0.0, 0.0);
+        for (Ball target : balls) {
+            if (ball.getId() != target.getId()) {
+                Tuple forces = ball.force(target);
+                A.add(forces);
+            }
+        }
 
-        // TODO calcular la fueraza de cada particula
+        A.add(ball.forceHorizontalWall(Wall.LEFT));
+        A.add(ball.forceHorizontalWall(Wall.RIGHT));
+        A.add(ball.forceVerticalWall(Wall.TOP));
+        A.add(ball.forceVerticalWall(Wall.BOTTOM));
 
-        return new Tuple(0.0, 0.0);
+        return A;
     }
 
     private static List<Tuple> getR2(List<List<Tuple>> newDerivatives, double dT){
         List<Tuple> deltasR2 = new ArrayList<>();
         for (Ball ball : balls) {
-
-            Tuple A = calculateA(ball, newDerivatives);
+            Tuple A = sumForces(ball);
+            ball.setForce(A);
             // TODO a checkear
             Tuple r2 = newDerivatives.get(ball.getId()).get(2);
 

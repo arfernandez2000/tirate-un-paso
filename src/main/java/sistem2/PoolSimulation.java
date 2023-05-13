@@ -24,17 +24,7 @@ public class PoolSimulation {
     private static void generateOutput(List<List<Double>> states) {
         try {
             FileWriter myWriter = new FileWriter("src/resources/states1_1.txt");
-            int count = 0;
-            for (List<Double> frame : states) {
-                if (count == 4|| count == 0) {
-                    myWriter.write(frame.get(0) + "\n");
-                    count = 0;
-                }
-                myWriter.write(frame.get(1) + "\t" + frame.get(2) + "\t" + frame.get(3) + "\t" + frame.get(4) + "\t" + frame.get(5) + "\n");
-                count++;
-            }
-            myWriter.close();
-            System.out.println("Successfully wrote states1_1.txt.");
+
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
