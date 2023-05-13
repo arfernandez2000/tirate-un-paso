@@ -36,8 +36,8 @@ public class GPC5 {
                 }
 
                 printWriter.println(printBalls(balls, balls.size(), t, gen));
-                if(gen >=532 && gen <= 535)
-                    System.out.println("debug");
+                if(gen >=532)
+                     System.out.println("debug");
                 // Prediction
                 List<List<Tuple>> newDerivatives = gearPredictor(currentRs);
 
@@ -149,6 +149,8 @@ public class GPC5 {
             double r2x = rs.get(2).getA() + (alpha[2] * dR2.get(count).getA() * 2) / (dT * dT);
             double r2y = rs.get(2).getB() + (alpha[2] * dR2.get(count).getB() * 2) / (dT * dT);
             Tuple r2 = new Tuple(r2x, r2y);
+            balls.get(count).setAccX(r2x);
+            balls.get(count).setAccY(r2y);
             auxNewDerivatives.add(r2);
 
             double r3x = rs.get(3).getA() + (alpha[3] * dR2.get(count).getA() * 6) / (dT * dT * dT);

@@ -11,6 +11,8 @@ public class Ball {
     private int mass;
     private double speedX;
     private double speedY;
+    private double accX;
+    private double accY;
     private Tuple force;
     private boolean isHole;
 
@@ -23,6 +25,8 @@ public class Ball {
         this.speedY = speedY;
         this.mass = mass;
         this.isHole = isHole;
+        this.accX = 0;
+        this.accY = 0;
     }
 
     public Ball(double x, double y, double radius, int mass, boolean isHole) {
@@ -34,6 +38,8 @@ public class Ball {
         this.speedY = 0;
         this.mass = mass;
         this.isHole = isHole;
+        this.accX = 0;
+        this.accY = 0;
     }
 
     public Tuple force(Ball b) {
@@ -164,6 +170,22 @@ public class Ball {
 
     public void setForce(Tuple force) {
         this.force = force;
+    }
+
+    public double getAccX() {
+        return accX;
+    }
+
+    public void setAccX(double accX) {
+        this.accX = accX;
+    }
+
+    public double getAccY() {
+        return accY;
+    }
+
+    public void setAccY(double accY) {
+        this.accY = accY;
     }
 
     @Override
