@@ -14,6 +14,8 @@ public class Ball {
     private int mass;
     private double speedX;
     private double speedY;
+
+    private Tuple force;
     private boolean isHole;
 
     public Ball(double x, double y, double radius, double speedX, double speedY, int mass,  boolean isHole) {
@@ -154,6 +156,14 @@ public class Ball {
 
     public void setMass(int mass) {
         this.mass = mass;
+    }
+
+    public Tuple getForce() {
+        return force;
+    }
+
+    public void setForce(Tuple force) {
+        this.force = force;
     }
 
     @Override
