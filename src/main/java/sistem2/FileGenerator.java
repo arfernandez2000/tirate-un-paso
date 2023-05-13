@@ -15,9 +15,9 @@ public class FileGenerator {
     private static final double WHITE_X = 56;
     private static final double WHITE_Y = 56;
 
-    private static final double INITIAL_SPEED = 200;
+    private static final double INITIAL_SPEED = 100;
 
-    private static final int MASS = 165;
+    private static final double MASS = 0.165;
 
     private static final double r = REAL_RADIUS + 0.015;
 

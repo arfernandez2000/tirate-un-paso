@@ -33,11 +33,13 @@ public class GPC5 {
                     ball.setY(currentRs.get(ball.getId()).get(0).getB());
                     ball.setSpeedX(currentRs.get(ball.getId()).get(1).getA());
                     ball.setSpeedY(currentRs.get(ball.getId()).get(1).getB());
+                    ball.setAccX(currentRs.get(ball.getId()).get(3).getA());
+                    ball.setAccY(currentRs.get(ball.getId()).get(3).getB());
                 }
 
                 printWriter.println(printBalls(balls, balls.size(), t, gen));
-                if(gen >=532)
-                     System.out.println("debug");
+//                if(gen >= 1062)
+//                    System.out.println("debug");
                 // Prediction
                 List<List<Tuple>> newDerivatives = gearPredictor(currentRs);
 
@@ -89,23 +91,29 @@ public class GPC5 {
 
     public static List<List<Tuple>> gearPredictor(List<List<Tuple>> der){
         List<List<Tuple>> newDerivatives = new ArrayList<>();
-
+        int count = 0;
         for (List<Tuple> rs : der) {  // para cada pelota
             List<Tuple> auxNewDerivatives = new ArrayList<>();
 
             double r0x = rs.get(0).getA() + rs.get(1).getA() * dT + rs.get(2).getA() * dT * dT / 2 + rs.get(3).getA() * dT * dT * dT / 6 + rs.get(4).getA() * dT * dT * dT * dT / 24 + rs.get(5).getA() * dT * dT * dT * dT * dT / 120;
             double r0y = rs.get(0).getB() + rs.get(1).getB() * dT + rs.get(2).getB() * dT * dT / 2 + rs.get(3).getB() * dT * dT * dT / 6 + rs.get(4).getB() * dT * dT * dT * dT / 24 + rs.get(5).getB() * dT * dT * dT * dT * dT / 120;
             Tuple r0 = new Tuple(r0x, r0y);
+            balls.get(count).setX(r0x);
+            balls.get(count).setY(r0y);
             auxNewDerivatives.add(r0);
 
             double r1x = rs.get(1).getA() + rs.get(2).getA() * dT + rs.get(3).getA() * dT * dT / 2 + rs.get(4).getA() * dT * dT * dT / 6 + rs.get(5).getA() * dT * dT * dT * dT / 24;
             double r1y = rs.get(1).getB() + rs.get(2).getB() * dT + rs.get(3).getB() * dT * dT / 2 + rs.get(4).getB() * dT * dT * dT / 6 + rs.get(5).getB() * dT * dT * dT * dT / 24;
             Tuple r1 = new Tuple(r1x, r1y);
+            balls.get(count).setSpeedX(r1x);
+            balls.get(count).setSpeedY(r1y);
             auxNewDerivatives.add(r1);
 
             double r2x = rs.get(2).getA() + rs.get(3).getA() * dT + rs.get(4).getA() * dT * dT / 2 + rs.get(5).getA() * dT * dT * dT / 6;
             double r2y = rs.get(2).getB() + rs.get(3).getB() * dT + rs.get(4).getB() * dT * dT / 2 + rs.get(5).getB() * dT * dT * dT / 6;
             Tuple r2 = new Tuple(r2x, r2y);
+            balls.get(count).setAccX(r2x);
+            balls.get(count).setAccY(r2y);
             auxNewDerivatives.add(r2);
 
             double r3x = rs.get(3).getA() + rs.get(4).getA() * dT + rs.get(5).getA() * dT * dT / 2;
@@ -124,6 +132,7 @@ public class GPC5 {
             auxNewDerivatives.add(r5);
 
             newDerivatives.add(auxNewDerivatives);
+            count++;
         }
         return newDerivatives;
     }
@@ -149,8 +158,6 @@ public class GPC5 {
             double r2x = rs.get(2).getA() + (alpha[2] * dR2.get(count).getA() * 2) / (dT * dT);
             double r2y = rs.get(2).getB() + (alpha[2] * dR2.get(count).getB() * 2) / (dT * dT);
             Tuple r2 = new Tuple(r2x, r2y);
-            balls.get(count).setAccX(r2x);
-            balls.get(count).setAccY(r2y);
             auxNewDerivatives.add(r2);
 
             double r3x = rs.get(3).getA() + (alpha[3] * dR2.get(count).getA() * 6) / (dT * dT * dT);

@@ -8,7 +8,7 @@ public class Ball {
     private double x;
     private double y;
     private double radius;
-    private int mass;
+    private double mass;
     private double speedX;
     private double speedY;
     private double accX;
@@ -16,7 +16,7 @@ public class Ball {
     private Tuple force;
     private boolean isHole;
 
-    public Ball(double x, double y, double radius, double speedX, double speedY, int mass,  boolean isHole) {
+    public Ball(double x, double y, double radius, double speedX, double speedY, double mass,  boolean isHole) {
         this.id = global_id++;
         this.x = x;
         this.y = y;
@@ -29,7 +29,7 @@ public class Ball {
         this.accY = 0;
     }
 
-    public Ball(double x, double y, double radius, int mass, boolean isHole) {
+    public Ball(double x, double y, double radius, double mass, boolean isHole) {
         this.id = global_id++;
         this.x = x;
         this.y = y;
@@ -156,11 +156,11 @@ public class Ball {
         this.id = id;
     }
 
-    public int getMass() {
+    public double getMass() {
         return mass;
     }
 
-    public void setMass(int mass) {
+    public void setMass(double mass) {
         this.mass = mass;
     }
 
