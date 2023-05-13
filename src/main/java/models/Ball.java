@@ -38,52 +38,58 @@ public class Ball {
         this.isHole = isHole;
     }
 
-    public double collidesX(){
-        double timeLeft = MathUtils.timeToCollisionParticleWallVertical(this, Wall.LEFT);
-        double timeRight = MathUtils.timeToCollisionParticleWallVertical(this, Wall.RIGHT);
-        return timeLeft >= 0? timeLeft: timeRight >= 0? timeRight: -1;
-    }
-
-    public double collidesY(){
-        double timeTop = MathUtils.timeToCollisionParticleWallHorizontal(this, Wall.TOP);
-        double timeBottom = MathUtils.timeToCollisionParticleWallHorizontal(this, Wall.BOTTOM);
-        return timeTop >= 0? timeTop: timeBottom >= 0? timeBottom: -1;
-    }
-
-    public double collides(Ball b) {
-        return MathUtils.timeToCollisionTwoParticles(this, b);
-    }
-
-    public void bounceX(double time){
-        setSpeedX(-getSpeedX());
-    }
-
-    public void bounceY(double time) {
-        setSpeedY(-getSpeedY());
-    }
-
-    //returns true if the balls bounced, false if one of them is a hole
-    public boolean bounce(Ball b, double time) {
-
-        if(this.isHole || b.isHole)
-            return false;
-
-        double jx = MathUtils.Jx(this, b)/this.getMass();
-        double jy = MathUtils.Jy(this, b)/this.getMass();
-
-        setSpeedX(getSpeedX() + jx);
-        setSpeedY(getSpeedY() + jy);
-
-        b.setSpeedX(b.getSpeedX() - jx);
-        b.setSpeedY(b.getSpeedY() - jy);
-        return true;
-    }
-
     public Tuple force(Ball b) {
-        Tuple b1 = new Tuple(getX(), getY());
-        Tuple b2 = new Tuple(b.getX(), b.getY());
-        return b2.versor(b1).multiply(
-                100 * (b2.subtract(b1).norm() - 2 * getRadius()));
+        double diffX = b.getX() - getX();
+        double diffY = b.getY() - getY();
+        double distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
+        double radius = getRadius() + b.getRadius();
+
+        if(distance > radius) {
+            return new Tuple(0, 0);
+        }
+
+        double f = 100 * (distance - radius);
+        return new Tuple(f * diffX / distance, f * diffY / distance);
+    }
+
+    public Tuple forceVerticalWall(Wall wall) {
+        double f = 0;
+        int k = 100;
+        double xDiff = Math.abs(getX() - getRadius() - wall.getX());
+        if(wall.isRightWall()) {
+            if(getX() + getRadius() >= wall.getX()) {
+                return new Tuple(0, 0);
+            }
+            f = -k * Math.abs(xDiff);
+        } else {
+            if(getX() - getRadius() <= wall.getX()) {
+                return new Tuple(0, 0);
+            }
+            f = k * Math.abs(xDiff);
+        }
+
+        return new Tuple(f, 0);
+
+    }
+
+    public Tuple forceHorizontalWall(Wall wall) {
+        double f = 0;
+        int k = 100;
+        double yDiff = Math.abs(getY() - getRadius() - wall.getY());
+
+        if(wall.isTopWall()) {
+            if(getY() + getRadius() >= wall.getY()) {
+                return new Tuple(0, 0);
+            }
+            f = -k * Math.abs(yDiff);
+        } else {
+            if(getY() + getRadius() >= wall.getY()) {
+                return new Tuple(0, 0);
+            }
+            f = k * Math.abs(yDiff);
+        }
+
+        return new Tuple(0, f);
     }
 
     public double getX() {

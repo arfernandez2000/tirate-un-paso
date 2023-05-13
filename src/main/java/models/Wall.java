@@ -14,6 +14,14 @@ public enum Wall {
         this.y = y;
     }
 
+    public boolean isRightWall(){
+        return this == RIGHT;
+    }
+
+    public boolean isTopWall(){
+        return this == TOP;
+    }
+
     public Integer getX() {
         return x;
     }
