@@ -38,8 +38,9 @@ public class Tuple {
         return new Tuple(a * d, b * d);
     }
 
-    public Tuple add(Tuple t){
-        return new Tuple(a + t.getA(), b + t.getB());
+    public void add(Tuple t){
+        a += t.getA();
+        b += t.getB();
     }
 
     public Tuple subtract(Tuple t){

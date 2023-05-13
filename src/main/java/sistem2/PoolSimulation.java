@@ -16,18 +16,7 @@ public class PoolSimulation {
 
         initialRs(setupBalls());
 
-        List<List<List<Double>>> states = gear();
-
-        generateOutput(states);
-    }
-
-    private static void generateOutput(List<List<Double>> states) {
-        try {
-            FileWriter myWriter = new FileWriter("src/resources/states1_1.txt");
-
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        gear();
+        System.out.println("out del gear");
     }
 }

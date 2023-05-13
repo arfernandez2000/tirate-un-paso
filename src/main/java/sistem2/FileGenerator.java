@@ -13,7 +13,7 @@ public class FileGenerator {
     private static final double MAX_EPSILON = 0.015;
     private static final double MIN_EPSILON = 0.01;
     private static final double WHITE_X = 56;
-    private static final double WHITE_Y = 42;
+    private static final double WHITE_Y = 56;
 
     private static final double INITIAL_SPEED = 200;
 
@@ -49,7 +49,7 @@ public class FileGenerator {
             }
         }
 
-        addHoles(balls);
+//        addHoles(balls);
 
         return balls;
     }

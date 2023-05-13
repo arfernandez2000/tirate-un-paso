@@ -1,12 +1,9 @@
 package models;
 
-import utils.MathUtils;
 import utils.Tuple;
 
 public class Ball {
-
     private static int global_id = 0;
-
     private int id;
     private double x;
     private double y;
@@ -14,7 +11,6 @@ public class Ball {
     private int mass;
     private double speedX;
     private double speedY;
-
     private Tuple force;
     private boolean isHole;
 
