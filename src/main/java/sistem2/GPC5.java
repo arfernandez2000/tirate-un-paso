@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.util.*;
 
 public class GPC5 {
-    private static final int PRECISION = 2;
+    private static final int PRECISION = 3;
     private static final double FINAL_TIME = 100;
     private static final double[] alpha = { 3.0/16, 251.0/360, 1, 11.0/18, 1.0/6, 1.0/60 };
     private static List<Ball> balls;
@@ -25,7 +25,7 @@ public class GPC5 {
             double t = dT;
             Map<Integer, List<Tuple>> currentRs = Rs;
             int gen = 0;
-            while (t <= FINAL_TIME) {
+            while (balls.stream().filter(b -> b.isDisabled()).count() < 16) {
                 for (Ball ball : balls) {
                     if (ball.getId() >= 16 || ball.isDisabled())
                         break;
