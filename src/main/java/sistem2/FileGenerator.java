@@ -51,7 +51,7 @@ public class FileGenerator {
             }
         }
 
-//        addHoles(balls);
+        addHoles(balls);
 
         return balls;
     }

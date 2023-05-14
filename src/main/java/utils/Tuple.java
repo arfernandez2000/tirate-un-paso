@@ -62,4 +62,7 @@ public class Tuple {
         return this.subtract(t).divide(this.subtract(t).norm());
     }
 
+    public boolean isEmpty() {
+        return a == 0 && b == 0;
+    }
 }

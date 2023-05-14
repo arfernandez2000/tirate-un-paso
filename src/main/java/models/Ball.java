@@ -15,6 +15,7 @@ public class Ball {
     private double accY;
     private Tuple force;
     private boolean isHole;
+    private boolean isDisabled = false;
 
     public Ball(double x, double y, double radius, double speedX, double speedY, double mass,  boolean isHole) {
         this.id = global_id++;
@@ -186,6 +187,14 @@ public class Ball {
 
     public void setAccY(double accY) {
         this.accY = accY;
+    }
+
+    public boolean isDisabled() {
+        return isDisabled;
+    }
+
+    public void disable() {
+        isDisabled = true;
     }
 
     @Override
