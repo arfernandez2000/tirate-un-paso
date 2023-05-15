@@ -40,14 +40,14 @@ public class FileGenerator {
                 double aux = ball.getX();
                 ball.setX(ball.getY());
                 ball.setY(aux);
-//                double random = Math.random();
-//                double randomX = -MIN_EPSILON + random * (MAX_EPSILON + MIN_EPSILON);
-//                double randomY = -MIN_EPSILON + random * (MAX_EPSILON + MIN_EPSILON);
+                double random = Math.random();
+                double randomX = -MIN_EPSILON + random * (MAX_EPSILON + MIN_EPSILON);
+                double randomY = -MIN_EPSILON + random * (MAX_EPSILON + MIN_EPSILON);
 
-//                ball.setX(ball.getX() + randomX + 168);
-                ball.setX(ball.getX() + 168);
-//                ball.setY(ball.getY() + randomY + 56);
-                ball.setY(ball.getY() + 56);
+                ball.setX(ball.getX() + randomX + 168);
+//                ball.setX(ball.getX() + 168);
+                ball.setY(ball.getY() + randomY + 56);
+//                ball.setY(ball.getY() + 56);
             }
         }
 
