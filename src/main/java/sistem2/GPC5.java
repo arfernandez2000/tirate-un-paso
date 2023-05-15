@@ -38,8 +38,7 @@ public class GPC5 {
                 }
 
                 printWriter.println(printBalls(balls, balls.size(), t, gen));
-//                if(gen >= 1062)
-//                    System.out.println("debug");
+
                 // Prediction
                 Map<Integer, List<Tuple>> newDerivatives = gearPredictor(currentRs);
                 // Evaluate
