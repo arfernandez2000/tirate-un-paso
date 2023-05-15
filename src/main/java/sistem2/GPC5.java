@@ -4,8 +4,6 @@ import models.Ball;
 import models.Wall;
 import utils.Tuple;
 
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.util.*;
 
 public class GPC5 {
@@ -16,53 +14,54 @@ public class GPC5 {
     private static final Map<Integer, List<Tuple>> Rs = new HashMap<>();
     private static final double dT = Math.pow(10, -PRECISION);
 
-    public static void gear() {
+    public static double gear() {
 
-        try {
-            FileWriter myWriter = new FileWriter("src/main/resources/states_" + PRECISION +".txt");
-            PrintWriter printWriter = new PrintWriter(myWriter);
+        double t = dT;
 
-            double t = dT;
-            Map<Integer, List<Tuple>> currentRs = Rs;
-            int gen = 0;
-            while (balls.stream().filter(b -> b.isDisabled()).count() < 16) {
-                for (Ball ball : balls) {
-                    if (ball.getId() >= 16 || ball.isDisabled())
-                        break;
-                    ball.setX(currentRs.get(ball.getId()).get(0).getA());
-                    ball.setY(currentRs.get(ball.getId()).get(0).getB());
-                    ball.setSpeedX(currentRs.get(ball.getId()).get(1).getA());
-                    ball.setSpeedY(currentRs.get(ball.getId()).get(1).getB());
-                    ball.setAccX(currentRs.get(ball.getId()).get(3).getA());
-                    ball.setAccY(currentRs.get(ball.getId()).get(3).getB());
-                }
+//            FileWriter myWriter = new FileWriter("src/main/resources/times_" + FileGenerator.white_y() +".txt");
+//            PrintWriter printWriter = new PrintWriter(myWriter);
 
-                printWriter.println(printBalls(balls, balls.size(), t, gen));
-//                if(gen >= 1062)
-//                    System.out.println("debug");
-                // Prediction
-                Map<Integer, List<Tuple>> newDerivatives = gearPredictor(currentRs);
-                // Evaluate
-                Map<Integer, Tuple> deltasR2 = getR2(newDerivatives);
-
-                // Correction
-                currentRs = gearCorrector(newDerivatives, deltasR2);
-
-                t += dT;
-                gen ++;
+        Map<Integer, List<Tuple>> currentRs = Rs;
+        int gen = 0;
+        while (balls.stream().filter(Ball::isDisabled).count() < 16) {
+            for (Ball ball : balls) {
+                if (ball.getId() >= 16 || ball.isDisabled())
+                    break;
+                ball.setX(currentRs.get(ball.getId()).get(0).getA());
+                ball.setY(currentRs.get(ball.getId()).get(0).getB());
+                ball.setSpeedX(currentRs.get(ball.getId()).get(1).getA());
+                ball.setSpeedY(currentRs.get(ball.getId()).get(1).getB());
+                ball.setAccX(currentRs.get(ball.getId()).get(3).getA());
+                ball.setAccY(currentRs.get(ball.getId()).get(3).getB());
             }
 
+//                printWriter.println(printBalls(balls, balls.size(), t, gen));
 
-            System.out.println("T: " + t);
+            // Prediction
+            Map<Integer, List<Tuple>> newDerivatives = gearPredictor(currentRs);
+            // Evaluate
+            Map<Integer, Tuple> deltasR2 = getR2(newDerivatives);
 
-            printWriter.close();
-            myWriter.close();
+            // Correction
+            currentRs = gearCorrector(newDerivatives, deltasR2);
 
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
+            t += dT;
+            gen ++;
         }
+
+
+//            System.out.println("T: " + t);
+
+//            printWriter.close();
+//            myWriter.close();
+
+//        } catch (Exception e) {
+//
+//            e.printStackTrace();
+//
+//        }
+
+        return t;
 
     }
     public static void initialRs(List<Ball> ballList){

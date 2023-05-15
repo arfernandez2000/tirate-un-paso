@@ -197,6 +197,10 @@ public class Ball {
         isDisabled = true;
     }
 
+    public static void resetGlobalId() {
+        global_id = 0;
+    }
+
     @Override
     public String toString() {
         return "Ball{" +

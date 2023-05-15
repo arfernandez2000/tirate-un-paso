@@ -13,7 +13,9 @@ public class FileGenerator {
     private static final double MAX_EPSILON = 0.015;
     private static final double MIN_EPSILON = 0.01;
     private static final double WHITE_X = 56;
-    private static final double WHITE_Y = 56;
+    private static final double[] WHITE_Y =
+            {42.0, 42.7, 43.4, 44.1, 44.8, 45.5, 46.2, 46.9, 47.6, 48.3, 49.0, 49.7, 50.4, 51.1, 51.8, 52.5, 53.2, 53.9, 54.6, 55.3, 56.0};
+    ;
 
     private static final double INITIAL_SPEED = 100;
 
@@ -21,10 +23,10 @@ public class FileGenerator {
 
     private static final double r = REAL_RADIUS + 0.015;
 
-    public static List<Ball> setupBalls() {
+    public static List<Ball> setupBalls(int i) {
         List<Ball> balls = new ArrayList<>();
-
-        balls.add(new Ball(WHITE_X, WHITE_Y, REAL_RADIUS, INITIAL_SPEED, 0, MASS, false));
+        Ball.resetGlobalId();
+        balls.add(new Ball(WHITE_X, WHITE_Y[i], REAL_RADIUS, INITIAL_SPEED, 0, MASS, false));
 
         // for each row
         for(int rowNumber = 0; rowNumber < 5; rowNumber++) {
@@ -40,14 +42,14 @@ public class FileGenerator {
                 double aux = ball.getX();
                 ball.setX(ball.getY());
                 ball.setY(aux);
-//                double random = Math.random();
-//                double randomX = -MIN_EPSILON + random * (MAX_EPSILON + MIN_EPSILON);
-//                double randomY = -MIN_EPSILON + random * (MAX_EPSILON + MIN_EPSILON);
+                double random = Math.random();
+                double randomX = -MIN_EPSILON + random * (MAX_EPSILON + MIN_EPSILON);
+                double randomY = -MIN_EPSILON + random * (MAX_EPSILON + MIN_EPSILON);
 
-//                ball.setX(ball.getX() + randomX + 168);
-                ball.setX(ball.getX() + 168);
-//                ball.setY(ball.getY() + randomY + 56);
-                ball.setY(ball.getY() + 56);
+                ball.setX(ball.getX() + randomX + 168);
+//                ball.setX(ball.getX() + 168);
+                ball.setY(ball.getY() + randomY + 56);
+//                ball.setY(ball.getY() + 56);
             }
         }
 
@@ -80,6 +82,10 @@ public class FileGenerator {
             case 4: return new double[] {-4*r, -2*r, 0, 2*r, 4*r};
             default: throw new IllegalArgumentException("no more than 5 rows");
         }
+    }
+
+    public static double white_y(int i){
+        return WHITE_Y[i];
     }
 
 }
